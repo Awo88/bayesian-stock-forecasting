@@ -1,7 +1,6 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # Bayesian Stock Return Forecasting
 # Author: Adebola Awokoya
-# Course Project — Applied Probability & Statistics
 #
 # Applies a Normal-Normal conjugate Bayesian model to estimate expected
 # daily stock returns for five equities. Uses historical return data as
