@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bayesian Stock Forecasting</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#07090e;--surface:#0d1117;--surface2:#131920;--border:#1e2a3a;--border2:#2a3a50;--text:#e0ddd6;--muted:#4a5a70;--muted2:#6a7a90;--accent:#6aaed4;--green:#7bc67e;--red:#e06868}
+body{background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;font-size:13px;min-height:100vh;padding:3rem 1.5rem 5rem}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+.wrap{max-width:640px;margin:0 auto;position:relative;z-index:1}
+.tag{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:3rem;color:var(--accent);line-height:1;letter-spacing:-.01em;margin-bottom:.75rem}
+.sub{font-size:11px;color:var(--muted2);letter-spacing:.06em;line-height:1.8;margin-bottom:2.5rem;max-width:480px}
+.divider{height:1px;background:var(--border);margin:2rem 0}
+.section-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.body-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--muted2);line-height:1.9;margin-bottom:1.5rem}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:2rem}
+.chip{font-size:9px;letter-spacing:.1em;padding:4px 12px;border-radius:2px;border:1px solid var(--border2);color:var(--muted2);text-transform:uppercase}
+.chip.lang{border-color:var(--accent);color:var(--accent)}
+.methods{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:2rem}
+.method{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:14px}
+.method-name{font-size:10px;color:var(--text);letter-spacing:.06em;margin-bottom:4px}
+.method-desc{font-size:10px;color:var(--muted);line-height:1.6}
+.repo-link{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border:1px solid var(--border2);border-radius:3px;color:var(--muted2);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:all .2s;margin-top:.5rem}
+.repo-link:hover{border-color:var(--accent);color:var(--accent)}
+.footer{margin-top:4rem;font-size:9px;color:var(--muted);letter-spacing:.06em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">Data Science · Finance · R</div>
+  <h1>Bayesian Stock<br>Forecasting</h1>
+  <p class="sub">Probabilistic equity price forecasting using Bayesian inference, posterior distributions, and real financial market data.</p>
+
+  <div class="divider"></div>
+
+  <div class="section-label">Overview</div>
+  <p class="body-text">This project applies Bayesian statistical methods to stock price forecasting — moving beyond point estimates to model full probability distributions over future returns. By incorporating prior beliefs and updating them with observed market data, the model produces posterior distributions that quantify uncertainty in a way traditional forecasting cannot.</p>
+  <p class="body-text">Built entirely in R, the analysis draws on real financial market data and outputs probabilistic forecasts with credible intervals rather than single-value predictions.</p>
+
+  <div class="divider"></div>
+
+  <div class="section-label">Methods</div>
+  <div class="methods">
+    <div class="method">
+      <div class="method-name">Bayesian Inference</div>
+      <div class="method-desc">Prior beliefs updated with observed data to produce posterior distributions over model parameters</div>
+    </div>
+    <div class="method">
+      <div class="method-name">Posterior Distributions</div>
+      <div class="method-desc">Full probability distributions over future price movements rather than single-point forecasts</div>
+    </div>
+    <div class="method">
+      <div class="method-name">Credible Intervals</div>
+      <div class="method-desc">Probabilistic uncertainty bands on forecasts, quantifying confidence at each time horizon</div>
+    </div>
+    <div class="method">
+      <div class="method-name">Market Data Analysis</div>
+      <div class="method-desc">Real financial price series used for model training, validation, and out-of-sample testing</div>
+    </div>
+  </div>
+
+  <div class="section-label">Stack</div>
+  <div class="chips">
+    <span class="chip lang">R</span>
+    <span class="chip">Bayesian Statistics</span>
+    <span class="chip">Probabilistic Modeling</span>
+    <span class="chip">Financial Data</span>
+    <span class="chip">MCMC</span>
+  </div>
+
+  <a class="repo-link" href="https://github.com/Awo88/bayesian-stock-forecasting" target="_blank">
+    ↗ View on GitHub
+  </a>
+
+  <div class="footer" style="margin-top:3rem">Personal project · Source available on GitHub</div>
+</div>
+</body>
+</html>
