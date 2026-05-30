@@ -4,79 +4,208 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bayesian Stock Forecasting</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#07090e;--surface:#0d1117;--surface2:#131920;--border:#1e2a3a;--border2:#2a3a50;--text:#e0ddd6;--muted:#4a5a70;--muted2:#6a7a90;--accent:#6aaed4;--green:#7bc67e;--red:#e06868}
-body{background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;font-size:13px;min-height:100vh;padding:3rem 1.5rem 5rem}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
-.wrap{max-width:640px;margin:0 auto;position:relative;z-index:1}
-.tag{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
-h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:3rem;color:var(--accent);line-height:1;letter-spacing:-.01em;margin-bottom:.75rem}
-.sub{font-size:11px;color:var(--muted2);letter-spacing:.06em;line-height:1.8;margin-bottom:2.5rem;max-width:480px}
-.divider{height:1px;background:var(--border);margin:2rem 0}
-.section-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
-.body-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--muted2);line-height:1.9;margin-bottom:1.5rem}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:2rem}
-.chip{font-size:9px;letter-spacing:.1em;padding:4px 12px;border-radius:2px;border:1px solid var(--border2);color:var(--muted2);text-transform:uppercase}
-.chip.lang{border-color:var(--accent);color:var(--accent)}
-.methods{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:2rem}
-.method{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:14px}
-.method-name{font-size:10px;color:var(--text);letter-spacing:.06em;margin-bottom:4px}
-.method-desc{font-size:10px;color:var(--muted);line-height:1.6}
-.repo-link{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border:1px solid var(--border2);border-radius:3px;color:var(--muted2);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:all .2s;margin-top:.5rem}
-.repo-link:hover{border-color:var(--accent);color:var(--accent)}
-.footer{margin-top:4rem;font-size:9px;color:var(--muted);letter-spacing:.06em}
+:root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--muted2:#6e7681;--accent:#58a6ff;--green:#3fb950;--yellow:#d29922;--purple:#bc8cff;--orange:#ffa657}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;padding:0;margin:0}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* top bar */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.topbar-sep{color:var(--border)}
+.topbar a{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12px}
+.topbar a:hover{color:var(--accent);text-decoration:none}
+
+/* hero */
+.hero{padding:48px 24px 36px;max-width:900px;margin:0 auto}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.hero-title{font-size:2.2rem;font-weight:600;color:var(--text);line-height:1.2;margin-bottom:16px}
+.hero-title span{color:var(--accent)}
+.hero-desc{font-size:15px;color:var(--muted);max-width:580px;line-height:1.7;margin-bottom:28px}
+.hero-stats{display:flex;gap:24px;flex-wrap:wrap}
+.stat-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.stat-dot{width:8px;height:8px;border-radius:50%}
+.stat-dot.r{background:#f78166}
+.stat-dot.g{background:var(--green)}
+.stat-dot.b{background:var(--accent)}
+.stat-dot.y{background:var(--yellow)}
+
+/* main */
+.main{max-width:900px;margin:0 auto;padding:0 24px 60px;display:grid;grid-template-columns:1fr 280px;gap:24px}
+@media(max-width:700px){.main{grid-template-columns:1fr}}
+
+/* sections */
+.section{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.section-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:.06em;font-family:'JetBrains Mono',monospace}
+.section-header .icon{font-size:14px}
+.section-body{padding:18px}
+
+/* overview */
+.overview-text{font-size:14px;color:var(--muted);line-height:1.8}
+
+/* steps */
+.step{display:flex;gap:14px;margin-bottom:18px}
+.step:last-child{margin-bottom:0}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);flex-shrink:0;margin-top:1px}
+.step-content{}
+.step-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* code block */
+.code-block{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#79c0ff;line-height:1.8;margin-top:14px;overflow-x:auto}
+.code-comment{color:var(--muted2)}
+.code-fn{color:#ff7b72}
+.code-str{color:#a5d6ff}
+.code-kw{color:var(--purple)}
+
+/* sidebar */
+.sidebar{}
+.side-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.side-header{padding:12px 16px;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:'JetBrains Mono',monospace}
+.side-body{padding:14px 16px}
+.badge-row{display:flex;flex-wrap:wrap;gap:6px}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:4px;font-size:11px;font-family:'JetBrains Mono',monospace;border:1px solid var(--border);color:var(--muted);background:var(--surface2)}
+.badge.r-lang{border-color:#75bfff;color:#75bfff;background:#0d1a2e}
+.badge.method{border-color:var(--purple);color:var(--purple);background:#1a1040}
+.badge.data{border-color:var(--green);color:var(--green);background:#0a1f0a}
+
+.meta-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.meta-row:last-child{border-bottom:none;padding-bottom:0}
+.meta-label{color:var(--muted2)}
+.meta-val{color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px}
+.meta-val.green{color:var(--green)}
+
+.repo-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-decoration:none}
+.repo-btn:hover{border-color:var(--accent);color:var(--accent);text-decoration:none;background:var(--surface)}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="tag">Data Science · Finance · R</div>
-  <h1>Bayesian Stock<br>Forecasting</h1>
-  <p class="sub">Probabilistic equity price forecasting using Bayesian inference, posterior distributions, and real financial market data.</p>
 
-  <div class="divider"></div>
-
-  <div class="section-label">Overview</div>
-  <p class="body-text">This project applies Bayesian statistical methods to stock price forecasting — moving beyond point estimates to model full probability distributions over future returns. By incorporating prior beliefs and updating them with observed market data, the model produces posterior distributions that quantify uncertainty in a way traditional forecasting cannot.</p>
-  <p class="body-text">Built entirely in R, the analysis draws on real financial market data and outputs probabilistic forecasts with credible intervals rather than single-value predictions.</p>
-
-  <div class="divider"></div>
-
-  <div class="section-label">Methods</div>
-  <div class="methods">
-    <div class="method">
-      <div class="method-name">Bayesian Inference</div>
-      <div class="method-desc">Prior beliefs updated with observed data to produce posterior distributions over model parameters</div>
-    </div>
-    <div class="method">
-      <div class="method-name">Posterior Distributions</div>
-      <div class="method-desc">Full probability distributions over future price movements rather than single-point forecasts</div>
-    </div>
-    <div class="method">
-      <div class="method-name">Credible Intervals</div>
-      <div class="method-desc">Probabilistic uncertainty bands on forecasts, quantifying confidence at each time horizon</div>
-    </div>
-    <div class="method">
-      <div class="method-name">Market Data Analysis</div>
-      <div class="method-desc">Real financial price series used for model training, validation, and out-of-sample testing</div>
-    </div>
-  </div>
-
-  <div class="section-label">Stack</div>
-  <div class="chips">
-    <span class="chip lang">R</span>
-    <span class="chip">Bayesian Statistics</span>
-    <span class="chip">Probabilistic Modeling</span>
-    <span class="chip">Financial Data</span>
-    <span class="chip">MCMC</span>
-  </div>
-
-  <a class="repo-link" href="https://github.com/Awo88/bayesian-stock-forecasting" target="_blank">
-    ↗ View on GitHub
-  </a>
-
-  <div class="footer" style="margin-top:3rem">Personal project · Source available on GitHub</div>
+<div class="topbar">
+  <a href="https://github.com/Awo88">Awo88</a>
+  <span class="topbar-sep">/</span>
+  <a href="https://github.com/Awo88/bayesian-stock-forecasting">bayesian-stock-forecasting</a>
+  <span class="topbar-sep">·</span>
+  <span>Public</span>
 </div>
+
+<div class="hero">
+  <div class="hero-eyebrow">// Data Science · Finance · Probabilistic Modeling</div>
+  <h1 class="hero-title">Bayesian <span>Stock Forecasting</span></h1>
+  <p class="hero-desc">Probabilistic equity price forecasting using Bayesian inference — modeling full posterior distributions over future returns instead of single-point predictions.</p>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-dot r"></div> R</div>
+    <div class="stat-item"><div class="stat-dot b"></div> Bayesian Statistics</div>
+    <div class="stat-item"><div class="stat-dot g"></div> Financial Market Data</div>
+    <div class="stat-item"><div class="stat-dot y"></div> Probabilistic Modeling</div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="content">
+
+    <div class="section">
+      <div class="section-header"><span class="icon">📋</span> Overview</div>
+      <div class="section-body">
+        <p class="overview-text">Traditional stock forecasting gives you a single number — a point estimate with no measure of confidence. This project takes a different approach: instead of predicting where a stock will be, it models the full probability distribution over future returns using Bayesian inference.<br><br>By defining prior beliefs about return behavior and updating them with observed market data, the model produces posterior distributions that quantify uncertainty at every forecast horizon. The result is a probabilistic view of the future — complete with credible intervals — rather than a false sense of precision.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><span class="icon">⚙</span> Methodology</div>
+      <div class="section-body">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <div class="step-title">Define the Prior</div>
+            <div class="step-desc">Establish prior distributions over model parameters based on financial theory and historical behavior of the asset class.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <div class="step-title">Ingest Market Data</div>
+            <div class="step-desc">Load real equity price series, compute log returns, and prepare the data for Bayesian updating.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <div class="step-title">Run Posterior Inference</div>
+            <div class="step-desc">Apply Bayes' theorem to update the prior with observed return data — using MCMC sampling to approximate the posterior distribution.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-content">
+            <div class="step-title">Generate Forecast Distributions</div>
+            <div class="step-desc">Draw samples from the posterior predictive distribution to produce a range of plausible future price paths with credible intervals.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">05</div>
+          <div class="step-content">
+            <div class="step-title">Evaluate & Validate</div>
+            <div class="step-desc">Test out-of-sample coverage of credible intervals and compare predictive accuracy against benchmark models.</div>
+          </div>
+        </div>
+        <div class="code-block"><span class="code-comment"># Posterior predictive distribution</span>
+<span class="code-kw">posterior_samples</span> &lt;- <span class="code-fn">extract</span>(fit, pars = <span class="code-str">"mu"</span>)
+<span class="code-fn">forecast_paths</span> &lt;- <span class="code-fn">apply</span>(posterior_samples$mu, <span class="code-str">1</span>, cumsum)
+<span class="code-fn">credible_interval</span>(forecast_paths, prob = <span class="code-str">0.95</span>)</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sidebar">
+    <div class="side-card">
+      <div class="side-header">Project Info</div>
+      <div class="side-body">
+        <div class="meta-row"><span class="meta-label">Language</span><span class="meta-val">R</span></div>
+        <div class="meta-row"><span class="meta-label">Type</span><span class="meta-val">Statistical Modeling</span></div>
+        <div class="meta-row"><span class="meta-label">Domain</span><span class="meta-val">Finance</span></div>
+        <div class="meta-row"><span class="meta-label">Data</span><span class="meta-val green">Real Market Data</span></div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-header">Methods</div>
+      <div class="side-body">
+        <div class="badge-row">
+          <span class="badge method">Bayesian Inference</span>
+          <span class="badge method">MCMC Sampling</span>
+          <span class="badge method">Posterior Distributions</span>
+          <span class="badge method">Credible Intervals</span>
+          <span class="badge method">Predictive Analytics</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-header">Stack</div>
+      <div class="side-body">
+        <div class="badge-row">
+          <span class="badge r-lang">R</span>
+          <span class="badge r-lang">Stan / RStan</span>
+          <span class="badge r-lang">ggplot2</span>
+          <span class="badge r-lang">tidyverse</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="side-header">Repository</div>
+      <div class="side-body">
+        <a class="repo-btn" href="https://github.com/Awo88/bayesian-stock-forecasting" target="_blank">
+          ↗ View on GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
